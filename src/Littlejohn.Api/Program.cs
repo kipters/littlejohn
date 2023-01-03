@@ -4,8 +4,8 @@
 
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security.Claims;
 using Littlejohn.Api.Authentication;
+using Littlejohn.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,16 +30,18 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 
-app.MapGet("/env", (IHostEnvironment env, HttpContext context) => new
-{
-    Version = Assembly
+app.MapGet("/env", (IHostEnvironment env, HttpContext context) => new EnvInfo
+(
+    Version: Assembly
         .GetEntryAssembly()?
         .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
         .InformationalVersion ?? "unknown",
-    Runtime = $"{Environment.Version}+{RuntimeInformation.RuntimeIdentifier}",
-    OS = RuntimeInformation.OSDescription,
-    Env = env.EnvironmentName,
-    Username = context.User?.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value
-});
+    Runtime: $"{Environment.Version}+{RuntimeInformation.RuntimeIdentifier}",
+    OS: RuntimeInformation.OSDescription,
+    Env: env.EnvironmentName,
+    Username: context.GetUsername()
+));
 
 app.Run();
+
+internal record EnvInfo(string Version, string Runtime, string OS, string Env, string? Username);
