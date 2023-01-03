@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Littlejohn.Api.Authentication;
 using Littlejohn.Api.Extensions;
+using Littlejohn.Api.Portfolios;
+using Littlejohn.Api.Tickers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization()
     .AddAuthentication(BasicAuthenticationOptions.SchemeName)
     .AddScheme<BasicAuthenticationOptions, BasicAuthenticationHandler>(BasicAuthenticationOptions.SchemeName, _ => { });
+builder.Services.AddSingleton<IPortfolioRepository, ProceduralPortfolioRepository>();
 
 var app = builder.Build();
 
@@ -41,6 +44,8 @@ app.MapGet("/env", (IHostEnvironment env, HttpContext context) => new EnvInfo
     Env: env.EnvironmentName,
     Username: context.GetUsername()
 ));
+
+app.MapTickers();
 
 app.Run();
 

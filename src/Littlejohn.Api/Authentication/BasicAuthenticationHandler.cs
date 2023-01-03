@@ -45,7 +45,7 @@ internal sealed class BasicAuthenticationHandler : AuthenticationHandler<BasicAu
 
     private AuthenticateResult ValidateToken(string token)
     {
-        byte[] buffer = Array.Empty<byte>();
+        var buffer = Array.Empty<byte>();
         try
         {
             buffer = ArrayPool<byte>.Shared.Rent(token.Length);
