@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "ms-dotnettools.csharp",
+    "ms-azuretools.vscode-docker",
+    "editorconfig.editorconfig",
+    "eamodio.gitlens",
+    "tintoy.msbuild-project-tools",
+    "logerfo.sln-support",
+    "ms-vscode-remote.vscode-remote-extensionpack"
+  ]
+}
