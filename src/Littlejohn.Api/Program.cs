@@ -4,6 +4,8 @@
 
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
+using Littlejohn.Api.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthorization()
+    .AddAuthentication(BasicAuthenticationOptions.SchemeName)
+    .AddScheme<BasicAuthenticationOptions, BasicAuthenticationHandler>(BasicAuthenticationOptions.SchemeName, _ => { });
 
 var app = builder.Build();
 
@@ -23,6 +28,8 @@ if (app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+app.UseAuthorization();
+
 app.MapGet("/env", (IHostEnvironment env, HttpContext context) => new
 {
     Version = Assembly
@@ -31,7 +38,8 @@ app.MapGet("/env", (IHostEnvironment env, HttpContext context) => new
         .InformationalVersion ?? "unknown",
     Runtime = $"{Environment.Version}+{RuntimeInformation.RuntimeIdentifier}",
     OS = RuntimeInformation.OSDescription,
-    Env = env.EnvironmentName
+    Env = env.EnvironmentName,
+    Username = context.User?.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value
 });
 
 app.Run();
