@@ -7,6 +7,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{19801396-692
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Littlejohn.Api", "src\Littlejohn.Api\Littlejohn.Api.csproj", "{87104DE5-757A-4A4B-8137-FC6D8BEF3103}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D46E8E79-E1B2-4F9E-B937-977F65D38FD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Littlejohn.Tests", "tests\Littlejohn.Tests\Littlejohn.Tests.csproj", "{C1D7482A-BF3C-4319-B949-EC61CA73C990}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Littlejohn.Procedural", "src\Littlejohn.Procedural\Littlejohn.Procedural.csproj", "{4B9DF514-3F4F-4ED3-8B53-DA1431D12382}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Littlejohn.Services", "src\Littlejohn.Services\Littlejohn.Services.csproj", "{F0E7921B-0755-4274-A5A4-A54E4C0012F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +28,23 @@ Global
 		{87104DE5-757A-4A4B-8137-FC6D8BEF3103}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87104DE5-757A-4A4B-8137-FC6D8BEF3103}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87104DE5-757A-4A4B-8137-FC6D8BEF3103}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1D7482A-BF3C-4319-B949-EC61CA73C990}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1D7482A-BF3C-4319-B949-EC61CA73C990}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1D7482A-BF3C-4319-B949-EC61CA73C990}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1D7482A-BF3C-4319-B949-EC61CA73C990}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B9DF514-3F4F-4ED3-8B53-DA1431D12382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B9DF514-3F4F-4ED3-8B53-DA1431D12382}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B9DF514-3F4F-4ED3-8B53-DA1431D12382}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B9DF514-3F4F-4ED3-8B53-DA1431D12382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0E7921B-0755-4274-A5A4-A54E4C0012F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0E7921B-0755-4274-A5A4-A54E4C0012F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0E7921B-0755-4274-A5A4-A54E4C0012F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0E7921B-0755-4274-A5A4-A54E4C0012F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{87104DE5-757A-4A4B-8137-FC6D8BEF3103} = {19801396-6923-474B-A56E-CA7544104DE0}
+		{C1D7482A-BF3C-4319-B949-EC61CA73C990} = {D46E8E79-E1B2-4F9E-B937-977F65D38FD6}
+		{4B9DF514-3F4F-4ED3-8B53-DA1431D12382} = {19801396-6923-474B-A56E-CA7544104DE0}
+		{F0E7921B-0755-4274-A5A4-A54E4C0012F7} = {19801396-6923-474B-A56E-CA7544104DE0}
 	EndGlobalSection
 EndGlobal

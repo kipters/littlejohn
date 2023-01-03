@@ -11,4 +11,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Littlejohn.Services\Littlejohn.Services.csproj" />
+    <ProjectReference Include="..\Littlejohn.Procedural\Littlejohn.Procedural.csproj" />
+  </ItemGroup>
+
 </Project>

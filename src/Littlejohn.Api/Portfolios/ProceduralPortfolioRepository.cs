@@ -1,35 +1,13 @@
 using System.Security.Cryptography;
 using System.Text;
 
+using static Littlejohn.Services.Tickers.TickerConstants;
+
 namespace Littlejohn.Api.Portfolios;
 
 #pragma warning disable CA1812 // This class is intended to be instantiated by DI
 internal sealed class ProceduralPortfolioRepository : IPortfolioRepository
 {
-    internal static string[] AllowedTickers =
-    {
-        "AAPL",
-        "MSFT",
-        "GOOG",
-        "AMZN",
-        "FB",
-        "TSLA",
-        "NVDA",
-        "JPM",
-        "BABA",
-        "JNJ",
-        "WMT",
-        "PG",
-        "PYPL",
-        "DIS",
-        "ADBE",
-        "PFE",
-        "V",
-        "MA",
-        "CRM",
-        "NFLX",
-    };
-
     public IEnumerable<string> GetSymbolsInUserPortfolio(string username)
     {
         // We need to generate portfolios in a stable pseudo-random way for any possible user, so the username

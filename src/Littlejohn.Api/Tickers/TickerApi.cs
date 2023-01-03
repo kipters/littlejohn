@@ -1,5 +1,6 @@
 using Littlejohn.Api.Extensions;
 using Littlejohn.Api.Portfolios;
+using Littlejohn.Services.Tickers;
 
 namespace Littlejohn.Api.Tickers;
 
@@ -21,7 +22,8 @@ internal static class TickerApi
 
     public static IResult GetUserTickers(
         HttpContext context,
-        IPortfolioRepository portfolioRepository
+        IPortfolioRepository portfolioRepository,
+        ITickerRepository tickerRepository
         )
     {
         var username = context.GetUsername();
@@ -36,7 +38,11 @@ internal static class TickerApi
 
         var symbols = portfolioRepository.GetSymbolsInUserPortfolio(username);
 
-        var tickers = symbols.Select(s => new Ticker(s, 123.4m));
+        var tickers = symbols.Select(s =>
+        {
+            var pricePoint = tickerRepository.GetTickerValue(s, DateOnly.FromDateTime(DateTime.UtcNow));
+            return new Ticker(s, pricePoint.Price);
+        });
 
         return Results.Ok(tickers);
     }

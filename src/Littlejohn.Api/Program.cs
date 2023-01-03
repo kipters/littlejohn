@@ -8,6 +8,8 @@ using Littlejohn.Api.Authentication;
 using Littlejohn.Api.Extensions;
 using Littlejohn.Api.Portfolios;
 using Littlejohn.Api.Tickers;
+using Littlejohn.Procedural.Tickers;
+using Littlejohn.Services.Tickers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,7 @@ builder.Services.AddAuthorization()
     .AddAuthentication(BasicAuthenticationOptions.SchemeName)
     .AddScheme<BasicAuthenticationOptions, BasicAuthenticationHandler>(BasicAuthenticationOptions.SchemeName, _ => { });
 builder.Services.AddSingleton<IPortfolioRepository, ProceduralPortfolioRepository>();
+builder.Services.AddSingleton<ITickerRepository, ProceduralTickerRepository>();
 
 var app = builder.Build();
 

@@ -1,4 +1,4 @@
-namespace Littlejohn.Api.Tickers;
+namespace Littlejohn.Services.Tickers;
 
 public record Ticker(
     string Symbol,
