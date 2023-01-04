@@ -1,5 +1,5 @@
 using Littlejohn.Api.Extensions;
-using Littlejohn.Api.Portfolios;
+using Littlejohn.Services.Portfolios;
 using Littlejohn.Services.Tickers;
 
 namespace Littlejohn.Api.Tickers;

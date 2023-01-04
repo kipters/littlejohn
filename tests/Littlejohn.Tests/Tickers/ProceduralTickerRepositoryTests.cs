@@ -68,6 +68,6 @@ public class ProceduralTickerRepositoryTests
         var sut = new ProceduralTickerRepository();
         var prices = sut.GetTickerValue("GOOG", Today, days).ToArray();
 
-        Assert.Equal(days, (uint) prices.Length);
+        Assert.Equal(days, (uint)prices.Length);
     }
 }

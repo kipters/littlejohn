@@ -6,9 +6,10 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Littlejohn.Api.Authentication;
 using Littlejohn.Api.Extensions;
-using Littlejohn.Api.Portfolios;
 using Littlejohn.Api.Tickers;
+using Littlejohn.Procedural.Portfolios;
 using Littlejohn.Procedural.Tickers;
+using Littlejohn.Services.Portfolios;
 using Littlejohn.Services.Tickers;
 
 var builder = WebApplication.CreateBuilder(args);

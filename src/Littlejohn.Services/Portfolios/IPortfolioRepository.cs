@@ -1,4 +1,4 @@
-namespace Littlejohn.Api.Portfolios;
+namespace Littlejohn.Services.Portfolios;
 
 public interface IPortfolioRepository
 {
