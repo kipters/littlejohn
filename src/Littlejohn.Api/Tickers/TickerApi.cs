@@ -21,14 +21,22 @@ internal static class TickerApi
         return group;
     }
 
-    private static IResult GetTickerHistory(string symbol, ITickerRepository tickerRepository)
+    private static IResult GetTickerHistory(string symbol, DateOnly? date, ITickerRepository tickerRepository)
     {
         if (!TickerConstants.AllowedTickers.Contains(symbol))
         {
             return Results.NotFound();
         }
 
-        var history = tickerRepository.GetTickerValue(symbol, DateOnly.FromDateTime(DateTime.Today), 90);
+        var today = DateTime.Today.ToDateOnly();
+        var selectedDate = date ?? today;
+
+        if (selectedDate > today)
+        {
+            selectedDate = today;
+        }
+
+        var history = tickerRepository.GetTickerValue(symbol, selectedDate, 90);
         return Results.Ok(history);
     }
 
