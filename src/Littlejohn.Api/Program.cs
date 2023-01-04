@@ -11,46 +11,85 @@ using Littlejohn.Procedural.Portfolios;
 using Littlejohn.Procedural.Tickers;
 using Littlejohn.Services.Portfolios;
 using Littlejohn.Services.Tickers;
+using Serilog;
+using Serilog.Formatting.Compact;
 
-var builder = WebApplication.CreateBuilder(args);
+#pragma warning disable CA1305 // False positive
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
+#pragma warning restore CA1305
 
-// Add services to the container.
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddAuthorization()
-    .AddAuthentication(BasicAuthenticationOptions.SchemeName)
-    .AddScheme<BasicAuthenticationOptions, BasicAuthenticationHandler>(BasicAuthenticationOptions.SchemeName, _ => { });
-builder.Services.AddSingleton<IPortfolioRepository, ProceduralPortfolioRepository>();
-builder.Services.AddSingleton<ITickerRepository, ProceduralTickerRepository>();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseHttpsRedirection();
+    var builder = WebApplication.CreateBuilder(args);
+    builder.Host.UseSerilog((context, services, configuration) =>
+    {
+        var config = configuration
+            .ReadFrom.Configuration(context.Configuration)
+            .ReadFrom.Services(services)
+            .Enrich.FromLogContext();
+
+        if (context.HostingEnvironment.IsDevelopment() ||
+            Environment.GetEnvironmentVariable("HUMAN_READABLE_LOGS") is not null)
+        {
+#pragma warning disable CA1305 // false positive
+            config = config.WriteTo.Console();
+#pragma warning restore CA1305
+        }
+        else
+        {
+            config.WriteTo.Console(new CompactJsonFormatter());
+        }
+    });
+
+    // Add services to the container.
+
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    builder.Services.AddAuthorization()
+        .AddAuthentication(BasicAuthenticationOptions.SchemeName)
+        .AddScheme<BasicAuthenticationOptions, BasicAuthenticationHandler>(BasicAuthenticationOptions.SchemeName, _ => { });
+    builder.Services.AddSingleton<IPortfolioRepository, ProceduralPortfolioRepository>();
+    builder.Services.AddSingleton<ITickerRepository, ProceduralTickerRepository>();
+
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+        app.UseHttpsRedirection();
+    }
+
+    app.UseAuthorization();
+
+    app.MapGet("/env", (IHostEnvironment env, HttpContext context) => new EnvInfo
+    (
+        Version: Assembly
+            .GetEntryAssembly()?
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+            .InformationalVersion ?? "unknown",
+        Runtime: $"{Environment.Version}+{RuntimeInformation.RuntimeIdentifier}",
+        OS: RuntimeInformation.OSDescription,
+        Env: env.EnvironmentName,
+        Username: context.GetUsername()
+    ));
+
+    app.MapTickers();
+
+    app.Run();
 }
-
-app.UseAuthorization();
-
-app.MapGet("/env", (IHostEnvironment env, HttpContext context) => new EnvInfo
-(
-    Version: Assembly
-        .GetEntryAssembly()?
-        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
-        .InformationalVersion ?? "unknown",
-    Runtime: $"{Environment.Version}+{RuntimeInformation.RuntimeIdentifier}",
-    OS: RuntimeInformation.OSDescription,
-    Env: env.EnvironmentName,
-    Username: context.GetUsername()
-));
-
-app.MapTickers();
-
-app.Run();
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Error during application bootstrap");
+    throw;
+}
+finally
+{
+    Log.CloseAndFlush();
+}
 
 internal record EnvInfo(string Version, string Runtime, string OS, string Env, string? Username);
