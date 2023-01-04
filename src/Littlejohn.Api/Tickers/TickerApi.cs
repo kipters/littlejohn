@@ -16,8 +16,20 @@ internal static class TickerApi
             .WithOpenApi();
 
         group.MapGet("/", GetUserTickers);
+        group.MapGet("/{symbol}/history", GetTickerHistory);
 
         return group;
+    }
+
+    private static IResult GetTickerHistory(string symbol, ITickerRepository tickerRepository)
+    {
+        if (!TickerConstants.AllowedTickers.Contains(symbol))
+        {
+            return Results.NotFound();
+        }
+
+        var history = tickerRepository.GetTickerValue(symbol, DateOnly.FromDateTime(DateTime.Today), 90);
+        return Results.Ok(history);
     }
 
     public static IResult GetUserTickers(
