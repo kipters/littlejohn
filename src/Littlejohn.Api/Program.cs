@@ -76,7 +76,11 @@ try
         OS: RuntimeInformation.OSDescription,
         Env: env.EnvironmentName,
         Username: context.GetUsername()
-    ));
+    ))
+    .Produces<EnvInfo>()
+    .WithOpenApi()
+    .WithName("EnvInfo")
+    .WithDescription("Return info about the execution environment");
 
     app.MapTickers();
 

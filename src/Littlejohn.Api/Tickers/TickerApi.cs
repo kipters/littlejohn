@@ -8,15 +8,25 @@ internal static class TickerApi
 {
     public static RouteGroupBuilder MapTickers(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("/tickers");
-
-        group.WithTags("Tickers");
+        var group = routes
+            .MapGroup("/tickers")
+            .WithTags("Tickers");
 
         group.RequireAuthorization()
             .WithOpenApi();
 
-        group.MapGet("/", GetUserTickers);
-        group.MapGet("/{symbol}/history", GetTickerHistory);
+        group
+            .MapGet("/", GetUserTickers)
+            .Produces<IEnumerable<Ticker>>()
+            .ProducesValidationProblem()
+            .WithName("User portfolio")
+            .WithDescription("Lets users see the latest value for tickers in their portfolio");
+        group
+            .MapGet("/{symbol}/history", GetTickerHistory)
+            .Produces<IEnumerable<TickerPricePoint>>()
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .WithName("Ticker historic prices")
+            .WithDescription("Lets the user see historic prices for tickers");
 
         return group;
     }
